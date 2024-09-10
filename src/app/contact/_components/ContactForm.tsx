@@ -42,8 +42,8 @@ const ContactForm = () => {
   return (
     <div className="flex h-screen w-screen">
       {/* Space Station Scene */}
-      <div className="w-1/2 h-full">
-        <SpaceStationScene />
+      <div className="w-1/2 h-full flex justify-center items-center">
+        <SpaceStationScene state={formState} />
       </div>
 
       {/* Contact Form */}
@@ -52,7 +52,7 @@ const ContactForm = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md z-20"
         >
           <h2 className="text-3xl font-bold mb-6 text-center text-white">
             Send a Cosmic Message

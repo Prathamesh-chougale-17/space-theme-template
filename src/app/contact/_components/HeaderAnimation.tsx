@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   motion,
   useAnimation,
@@ -6,7 +6,11 @@ import {
   useTransform,
 } from "framer-motion";
 
-const SpaceStationScene = () => {
+const SpaceStationScene = ({
+  state,
+}: {
+  state: "idle" | "success" | "error";
+}) => {
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchResult, setLaunchResult] = useState<
     "idle" | "success" | "error"
@@ -22,7 +26,7 @@ const SpaceStationScene = () => {
     idle: { y: 0, rotate: 0 },
     launch: {
       y: -1000,
-      rotate: 0,
+      rotate: -45,
       transition: { duration: 2, ease: "easeInOut" },
     },
     success: {
@@ -45,16 +49,29 @@ const SpaceStationScene = () => {
     },
   };
 
+  //   const handleLaunch = async () => {
+  //     if (isLaunching) return;
+  //     setIsLaunching(true);
+  //     await controls.start("launch");
+  //     const success = Math.random() > 0.5;
+  //     setLaunchResult(success ? "success" : "error");
+  //     await controls.start(success ? "success" : "error");
+  //     setIsLaunching(false);
+  //   };
+
+  useEffect(() => {
+    handleLaunch();
+  }, [state]);
+
   const handleLaunch = async () => {
-    if (isLaunching) return;
+    if (isLaunching || state == "idle") return;
     setIsLaunching(true);
     await controls.start("launch");
-    const success = Math.random() > 0.5;
+    const success = state === "success";
     setLaunchResult(success ? "success" : "error");
     await controls.start(success ? "success" : "error");
     setIsLaunching(false);
   };
-
   const opacityByY = useTransform(rocketY, [-1000, 0], [0, 1]);
 
   return (
@@ -187,7 +204,7 @@ const SpaceStationScene = () => {
         style={{
           y: rocketY,
           opacity: opacityByY,
-          visibility: launchResult != "error" ? "visible" : "hidden",
+          visibility: launchResult == "success" ? "visible" : "hidden",
         }}
       >
         <motion.div
@@ -222,7 +239,7 @@ const SpaceStationScene = () => {
       </motion.div>
 
       {/* Launch Button */}
-      <motion.button
+      {/* <motion.button
         className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-2 rounded-full font-bold"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -230,7 +247,7 @@ const SpaceStationScene = () => {
         disabled={isLaunching}
       >
         {isLaunching ? "Launching..." : "Launch Rocket"}
-      </motion.button>
+      </motion.button> */}
     </div>
   );
 };
