@@ -2,9 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root::-webkit-scrollbar {
+  display: none;
+}
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #171717; 
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  user-select: none;
+
 }
 
 @media (prefers-color-scheme: dark) {

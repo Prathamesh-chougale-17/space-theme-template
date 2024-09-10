@@ -44,7 +44,7 @@ const Home = () => {
   };
   return (
     <div
-      className="w-full h-screen overflow-hidden relative flex flex-col lg:flex-row"
+      className="w-full overflow-hidden relative flex flex-col lg:flex-row"
       onMouseMove={handleMouseMove}
     >
       {/* Content */}
