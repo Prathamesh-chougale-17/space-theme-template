@@ -59,13 +59,13 @@ const CosmicHomePage = () => {
 
   return (
     <div
-      className="w-full h-screen bg-black overflow-hidden relative flex"
+      className="w-full h-screen bg-black overflow-hidden relative flex flex-col lg:flex-row"
       onMouseMove={handleMouseMove}
     >
       {/* Content */}
-      <div className="w-1/2 flex flex-col justify-center items-start pl-16 text-white">
+      <div className="w-full lg:w-2/3 flex flex-col justify-center items-center lg:items-start p-8 lg:pl-16 text-white">
         <motion.h1
-          className="text-6xl font-bold mb-4"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-center lg:text-left"
           variants={textVariants}
           initial="hidden"
           animate="visible"
@@ -73,7 +73,7 @@ const CosmicHomePage = () => {
           Welcome to the Cosmos
         </motion.h1>
         <motion.p
-          className="text-xl mb-8"
+          className="text-lg md:text-xl mb-8 text-center lg:text-left"
           variants={textVariants}
           initial="hidden"
           animate="visible"
@@ -90,10 +90,9 @@ const CosmicHomePage = () => {
       </div>
 
       {/* Planet SVG */}
-      <div className="w-1/2 flex justify-center items-center">
+      <div className="w-full lg:w-1/2 flex justify-center items-center mt-8 lg:mt-0">
         <svg
-          width="100%"
-          height="100%"
+          className="w-full h-full max-w-md lg:max-w-full"
           viewBox="0 0 1000 1000"
           xmlns="http://www.w3.org/2000/svg"
         >
