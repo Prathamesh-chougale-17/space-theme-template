@@ -19,10 +19,10 @@ const socialLinks = [
 ];
 const Footer = () => {
   return (
-    <footer className="bg-black">
+    <footer className="w-full absolute bottom-0">
       <div className="container mx-auto">
         <div className="border-t py-4 px-6 border-gray-700 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
+          <div className="text-gray-400 text-sm mb-4 md:mb-0">
             &copy; 2024{" "}
             <LinkPreview
               url="https://prathameshchougale.me"
@@ -31,7 +31,7 @@ const Footer = () => {
               Prathamesh Chougale
             </LinkPreview>
             . All rights reserved.
-          </p>
+          </div>
           <div className="flex space-x-4">
             {socialLinks.map((link, index) => (
               <Link
