@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        <div className="relative pt-16 lg:pt-4 w-full min-h-screen text-white bg-black flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative py-16 w-full min-h-screen text-white bg-black flex flex-col items-center justify-center overflow-hidden">
           <SparklesCore
             id="tsparticlesfullpage"
             background="transparent"

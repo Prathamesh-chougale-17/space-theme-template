@@ -14,6 +14,10 @@ import Link from "next/link";
 
 const routes = [
   {
+    name: "Home",
+    url: "/",
+  },
+  {
     name: "About",
     url: "/about",
   },
