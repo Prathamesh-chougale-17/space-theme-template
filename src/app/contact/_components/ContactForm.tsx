@@ -41,7 +41,7 @@ const ContactForm = () => {
     // Randomly succeed or fail for demonstration purposes
     const success = Math.random() > 0.5;
     setFormState(success ? "success" : "error");
-    if (success === false) reset();
+    if (success === true) reset();
 
     // Reset launching state after animation completes
     // setTimeout(() => setIsLaunching(false), 3000);
