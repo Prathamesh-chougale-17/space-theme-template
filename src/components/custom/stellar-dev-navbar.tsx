@@ -11,6 +11,7 @@ import {
 } from "../ui/sheet";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const routes = [
   {
@@ -83,18 +84,24 @@ const Navbar = () => {
               </SheetDescription>
             </SheetContent>
           </Sheet>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="hidden md:flex space-x-4"
+          className="hidden md:flex space-x-4 text-white items-center justify-center"
         >
           {routes.map((route) => (
             <Link key={route.name} href={route.url}>
               <Button
                 variant="ghost"
-                className={`text-white hover:text-purple-300 ${
+                className={`hover:text-purple-300 ${
                   pathname === route.url ? "bg-purple-800" : ""
                 }`}
               >
@@ -102,6 +109,12 @@ const Navbar = () => {
               </Button>
             </Link>
           ))}
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </motion.div>
       </nav>
     </header>

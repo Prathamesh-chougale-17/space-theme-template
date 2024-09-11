@@ -12,11 +12,15 @@ import SpaceStationScene from "./HeaderAnimation";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Invalid email address." }),
+  subject: z
+    .string()
+    .min(2, { message: "Subject must be at least 2 characters" }),
   message: z
     .string()
     .min(10, { message: "Message must be at least 10 characters." }),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 const ContactForm = () => {
   const [formState, setFormState] = useState<"idle" | "success" | "error">(
@@ -28,24 +32,44 @@ const ContactForm = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async () => {
-    setIsLaunching(true);
+  const onSubmit = async (data: FormValues) => {
+    // setIsLaunching(true);
 
     // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Randomly succeed or fail for demonstration purposes
-    const success = Math.random() > 0.5;
-    setFormState(success ? "success" : "error");
-    if (success === true) reset();
+    // const success = Math.random() > 0.5;
+    // setFormState(success ? "success" : "error");
+    // if (success === true) reset();
 
     // Reset launching state after animation completes
     // setTimeout(() => setIsLaunching(false), 3000);
-    setIsLaunching(false);
+    try {
+      setIsLaunching(true);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        setFormState("success");
+        reset();
+      } else {
+        setFormState("error");
+      }
+    } catch (error) {
+      console.error(error);
+      setFormState("error");
+    } finally {
+      setIsLaunching(false);
+    }
   };
 
   return (
@@ -84,14 +108,14 @@ const ContactForm = () => {
             </div>
             <div>
               <Input
-                {...register("email")}
-                placeholder="Your Email"
-                type="email"
+                {...register("subject")}
+                placeholder="Your Subject"
+                type="subject"
                 className="w-full bg-gray-800 text-white border-purple-500"
               />
-              {errors.email && (
+              {errors.subject && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message?.toString()}
+                  {errors.subject.message?.toString()}
                 </p>
               )}
             </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { SparklesCore } from "@/components/animation/sparkles";
 import Navbar from "@/components/custom/stellar-dev-navbar";
 import Footer from "@/components/custom/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,20 +32,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <div className="relative py-16 w-full min-h-screen text-white bg-black flex flex-col items-center justify-center overflow-hidden">
-          <SparklesCore
-            id="tsparticlesfullpage"
-            background="transparent"
-            minSize={0.6}
-            maxSize={1.4}
-            particleDensity={100}
-            className="w-full min-h-screen absolute inset-0 z-0"
-            particleColor="#FFFFFF"
-          />
-          {children}
-          <Footer />
-        </div>
+        <ClerkProvider>
+          <Navbar />
+          <div className="relative py-16 w-full min-h-screen text-white bg-black flex flex-col items-center justify-center overflow-hidden">
+            <SparklesCore
+              id="tsparticlesfullpage"
+              background="transparent"
+              minSize={0.6}
+              maxSize={1.4}
+              particleDensity={100}
+              className="w-full min-h-screen absolute inset-0 z-0"
+              particleColor="#FFFFFF"
+            />
+            {children}
+            <Footer />
+          </div>
+        </ClerkProvider>
       </body>
     </html>
   );
