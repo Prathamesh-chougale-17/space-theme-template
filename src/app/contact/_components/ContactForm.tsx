@@ -26,6 +26,7 @@ const ContactForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -40,6 +41,7 @@ const ContactForm = () => {
     // Randomly succeed or fail for demonstration purposes
     const success = Math.random() > 0.5;
     setFormState(success ? "success" : "error");
+    if (success === false) reset();
 
     // Reset launching state after animation completes
     // setTimeout(() => setIsLaunching(false), 3000);
@@ -47,24 +49,27 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen w-screen">
       {/* Space Station Scene */}
-      <div className="w-1/2 h-full flex justify-center items-center">
+      <div className="w-full mt-20 lg:w-1/2 h-[300px] lg:h-auto flex justify-center items-center">
         <SpaceStationScene state={formState} isLaunching={isLaunching} />
       </div>
 
       {/* Contact Form */}
-      <div className="w-1/2 h-full flex items-center justify-center p-8 overflow-y-auto">
+      <div className="w-full lg:w-1/2 flex items-center z-20 justify-center p-4 lg:p-8 overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-md z-20"
+          className="w-full max-w-md"
         >
-          <h2 className="text-3xl font-bold mb-6 text-center text-white">
+          <h2 className="text-2xl lg:text-3xl font-bold mb-6 text-center text-white">
             Send a Cosmic Message
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 lg:space-y-6"
+          >
             <div>
               <Input
                 {...register("name")}
@@ -95,6 +100,7 @@ const ContactForm = () => {
                 {...register("message")}
                 placeholder="Your Message"
                 className="w-full bg-gray-800 text-white border-purple-500"
+                rows={4}
               />
               {errors.message && (
                 <p className="text-red-500 text-sm mt-1">
@@ -104,15 +110,15 @@ const ContactForm = () => {
             </div>
             <Button
               type="submit"
-              disabled={isLaunching}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              disabled={isLaunching || formState === "success"}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded transition-colors duration-300"
             >
               {isLaunching
                 ? "Launching..."
                 : formState === "success"
                 ? "Message Sent!"
                 : formState === "error"
-                ? "Sending Failed"
+                ? "Try Again"
                 : "Send Message"}
             </Button>
           </form>
