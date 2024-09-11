@@ -160,7 +160,7 @@ const SpaceStationScene = ({
 
       {/* Flame Effect */}
       <motion.div
-        className="absolute -bottom-5 left-[54.4%] transform -translate-x-1/2 w-8 h-10"
+        className="absolute -bottom-5 left-[54.4%] md:block hidden transform -translate-x-1/2 w-8 h-10"
         style={{
           y: rocketY,
           opacity: opacityByY,
@@ -183,7 +183,7 @@ const SpaceStationScene = ({
 
       {/* Launch Result Message */}
       <motion.div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold"
+        className="absolute top-2/3 left-1/3 hidden md:block transform -translate-x-1/2 -translate-y-1/2 text-nowrap text-white text-4xl font-bold"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{
           opacity: state !== "idle" ? 1 : 0,
@@ -192,9 +192,9 @@ const SpaceStationScene = ({
         transition={{ duration: 0.5 }}
       >
         {state === "success"
-          ? "Mission Successful!"
+          ? "Mission Successful 🚀"
           : state === "error"
-          ? "Launch Failed!"
+          ? "Oops Mission Failed 😢"
           : ""}
       </motion.div>
     </div>
