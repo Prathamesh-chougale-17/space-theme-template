@@ -22,6 +22,7 @@ const ContactForm = () => {
   const [formState, setFormState] = useState<"idle" | "success" | "error">(
     "idle"
   );
+  const [isLaunching, setIsLaunching] = useState(false);
   const {
     register,
     handleSubmit,
@@ -29,16 +30,20 @@ const ContactForm = () => {
   } = useForm({
     resolver: zodResolver(formSchema),
   });
-  const [isLaunching, setIsLaunching] = useState(false);
 
   const onSubmit = async () => {
-    setFormState("idle"); // Reset state
     setIsLaunching(true);
+
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Randomly succeed or fail for demonstration purposes
     const success = Math.random() > 0.5;
     setFormState(success ? "success" : "error");
+
+    // Reset launching state after animation completes
+    // setTimeout(() => setIsLaunching(false), 3000);
+    setIsLaunching(false);
   };
 
   return (
@@ -99,14 +104,16 @@ const ContactForm = () => {
             </div>
             <Button
               type="submit"
-              disabled={formState !== "idle"}
+              disabled={isLaunching}
               className="w-full bg-purple-600 hover:bg-purple-700 text-white"
             >
-              {formState === "idle"
-                ? "Send Message"
+              {isLaunching
+                ? "Launching..."
                 : formState === "success"
                 ? "Message Sent!"
-                : "Sending Failed"}
+                : formState === "error"
+                ? "Sending Failed"
+                : "Send Message"}
             </Button>
           </form>
         </motion.div>
@@ -116,69 +123,3 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
-
-/*
-<motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="max-w-md mx-auto mb-12 relative"
-    >
-      <h2 className="text-3xl font-bold mb-6 text-center text-white">
-        Send a Cosmic Message
-      </h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div>
-          <Input
-            {...register("name")}
-            placeholder="Your Name"
-            className="w-full bg-gray-800 text-white border-purple-500"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.name.message?.toString()}
-            </p>
-          )}
-        </div>
-        <div>
-          <Input
-            {...register("email")}
-            placeholder="Your Email"
-            type="email"
-            className="w-full bg-gray-800 text-white border-purple-500"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.email.message?.toString()}
-            </p>
-          )}
-        </div>
-        <div>
-          <Textarea
-            {...register("message")}
-            placeholder="Your Message"
-            className="w-full bg-gray-800 text-white border-purple-500"
-          />
-          {errors.message && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.message.message?.toString()}
-            </p>
-          )}
-        </div>
-        <Button
-            type="submit"
-            disabled={formState !== "idle"}
-            className="w-full z-40"
-          >
-            {formState === "idle"
-              ? "Send Message"
-              : formState === "success"
-              ? "Message Sent!"
-              : "Sending Failed"}
-          </Button>
-      </form>
-    </motion.div>
-
-*/
-
-// export default ContactForm;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   motion,
   useAnimation,
@@ -13,12 +13,6 @@ const SpaceStationScene = ({
   state: "idle" | "success" | "error";
   isLaunching: boolean;
 }) => {
-  // const [isLaunching, setIsLaunching] = useState(false);
-  const [launchResult, setLaunchResult] = useState<
-    "idle" | "success" | "error"
-  >("idle");
-  const [, setIsHovering] = useState(false);
-
   const controls = useAnimation();
   const rocketY = useMotionValue(0);
   const rocketRotation = useMotionValue(0);
@@ -50,17 +44,26 @@ const SpaceStationScene = ({
       transition: { duration: 20, ease: "linear", repeat: Infinity },
     },
   };
-  const handleLaunch = async () => {
-    if (isLaunching) return;
-    await controls.start("launch");
 
-    const success = state === "success";
-    setLaunchResult(success ? "success" : "error");
-    await controls.start(success ? "success" : "error");
-  };
   useEffect(() => {
+    const handleLaunch = async () => {
+      console.log("handleLaunch", state, isLaunching);
+      if (isLaunching) {
+        await controls.start("launch");
+        // if (!isLaunching) await controls.start(state);
+      } else {
+        if (state === "success") {
+          controls.start("success");
+        } else if (state === "error") {
+          controls.start("error");
+        } else {
+          controls.start("idle");
+        }
+      }
+    };
+
     handleLaunch();
-  }, [state, isLaunching]);
+  }, [state, isLaunching, controls]);
 
   const opacityByY = useTransform(rocketY, [-1000, 0], [0, 1]);
 
@@ -93,21 +96,11 @@ const SpaceStationScene = ({
         width="100"
         height="100"
         viewBox="0 0 381.019 381.019"
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2"
         initial="idle"
-        transform="rotate(45)"
         animate={controls}
         variants={rocketVariants}
         style={{ y: rocketY, rotate: rocketRotation, scale: rocketScale }}
-        onHoverStart={() => {
-          setIsHovering(true);
-          rocketScale.set(1.1);
-        }}
-        onHoverEnd={() => {
-          setIsHovering(false);
-          rocketScale.set(1);
-        }}
-        onClick={handleLaunch}
       >
         <g>
           <motion.polygon
@@ -171,7 +164,7 @@ const SpaceStationScene = ({
         style={{
           y: rocketY,
           opacity: opacityByY,
-          visibility: launchResult == "success" ? "visible" : "hidden",
+          visibility: state === "success" ? "visible" : "hidden",
         }}
       >
         <motion.div
@@ -193,28 +186,17 @@ const SpaceStationScene = ({
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{
-          opacity: launchResult !== "idle" ? 1 : 0,
-          scale: launchResult !== "idle" ? 1 : 0.5,
+          opacity: state !== "idle" ? 1 : 0,
+          scale: state !== "idle" ? 1 : 0.5,
         }}
         transition={{ duration: 0.5 }}
       >
-        {launchResult === "success"
+        {state === "success"
           ? "Mission Successful!"
-          : launchResult === "error"
+          : state === "error"
           ? "Launch Failed!"
           : ""}
       </motion.div>
-
-      {/* Launch Button */}
-      {/* <motion.button
-        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-2 rounded-full font-bold"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleLaunch}
-        disabled={isLaunching}
-      >
-        {isLaunching ? "Launching..." : "Launch Rocket"}
-      </motion.button> */}
     </div>
   );
 };
