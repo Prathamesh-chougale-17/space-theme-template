@@ -8,10 +8,12 @@ import {
 
 const SpaceStationScene = ({
   state,
+  isLaunching,
 }: {
   state: "idle" | "success" | "error";
+  isLaunching: boolean;
 }) => {
-  const [isLaunching, setIsLaunching] = useState(false);
+  // const [isLaunching, setIsLaunching] = useState(false);
   const [launchResult, setLaunchResult] = useState<
     "idle" | "success" | "error"
   >("idle");
@@ -48,57 +50,22 @@ const SpaceStationScene = ({
       transition: { duration: 20, ease: "linear", repeat: Infinity },
     },
   };
-
-  //   const handleLaunch = async () => {
-  //     if (isLaunching) return;
-  //     setIsLaunching(true);
-  //     await controls.start("launch");
-  //     const success = Math.random() > 0.5;
-  //     setLaunchResult(success ? "success" : "error");
-  //     await controls.start(success ? "success" : "error");
-  //     setIsLaunching(false);
-  //   };
-
-  useEffect(() => {
-    handleLaunch();
-  }, [state]);
-
   const handleLaunch = async () => {
-    if (isLaunching || state == "idle") return;
-    setIsLaunching(true);
+    if (isLaunching) return;
     await controls.start("launch");
+
     const success = state === "success";
     setLaunchResult(success ? "success" : "error");
     await controls.start(success ? "success" : "error");
-    setIsLaunching(false);
   };
+  useEffect(() => {
+    handleLaunch();
+  }, [state, isLaunching]);
+
   const opacityByY = useTransform(rocketY, [-1000, 0], [0, 1]);
 
   return (
     <div className="relative w-full h-[500px]">
-      {/* Stars */}
-      {/* {[...Array(100)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute bg-white rounded-full"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            width: `${Math.random() * 3}px`,
-            height: `${Math.random() * 3}px`,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: Math.random() * 3 + 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))} */}
-
       {/* Space Station */}
       <motion.svg
         width="200"

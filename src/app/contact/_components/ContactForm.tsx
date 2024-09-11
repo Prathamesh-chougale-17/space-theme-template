@@ -29,9 +29,11 @@ const ContactForm = () => {
   } = useForm({
     resolver: zodResolver(formSchema),
   });
+  const [isLaunching, setIsLaunching] = useState(false);
 
   const onSubmit = async () => {
     setFormState("idle"); // Reset state
+    setIsLaunching(true);
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 2000));
     // Randomly succeed or fail for demonstration purposes
@@ -43,7 +45,7 @@ const ContactForm = () => {
     <div className="flex h-screen w-screen">
       {/* Space Station Scene */}
       <div className="w-1/2 h-full flex justify-center items-center">
-        <SpaceStationScene state={formState} />
+        <SpaceStationScene state={formState} isLaunching={isLaunching} />
       </div>
 
       {/* Contact Form */}
